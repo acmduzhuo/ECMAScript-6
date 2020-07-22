@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #box {
+            width: 400px;
+            height: 600px;
+            position: relative;
+        }
+
+        .img1,
+        .img2 {
+            width: 300px;
+            height: 400px;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            transition: all 3s;
+            backface-visibility: hidden;
+            /*让页面上背面的元素不可见**/
+        }
+
+        .img2 {
+            transform: rotateY(180deg);
+        }
+
+        #box:hover .img1 {
+            transform: rotateY(180deg);
+        }
+
+        #box:hover .img2 {
+            transform: rotateY(0deg);
+        }
+    </style>
+
+</head>
+
+<body>
+<div id="box">
+    <img src="./你的名字2.jpg" alt="没有啦!咋办" class="img1">
+    <img src="./你的名字1.jpg" alt="没有啦!咋办" class="img2">
+</div>
+
+</body>
+
+</html>
+
