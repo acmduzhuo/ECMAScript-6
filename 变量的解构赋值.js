@@ -219,10 +219,110 @@
 // }
 // add([1,2]);
 //[[1,2], [3,4]].map(([a,b]) => a + b);
-function move({x= 0,y=0} = {}) {
-    return[x, y];
-}
-console.log(move({x:3,y:8}));//[ 3, 8 ]
-console.log(move({x:3}));//[ 3, 0 ]
-console.log(move({}));//[ 0, 0 ]
-console.log(move());//[ 0, 0 ]
+// function move({x= 0,y=0} = {}) {
+//     return[x, y];
+// }
+// console.log(move({x:3,y:8}));//[ 3, 8 ]
+// console.log(move({x:3}));//[ 3, 0 ]
+// console.log(move({}));//[ 0, 0 ]
+// console.log(move());//[ 0, 0 ]
+// function movement({x,y} = {x:0, y:0}) {
+//     return [x, y];
+// }
+// console.log(movement({x:3,y:8}));
+// console.log(movement({x:3}));//[ 3, undefined ]
+// console.log(movement({}));//[ undefined, undefined ]
+// console.log(movement());
+//由于函数是对参数赋值，并非对xy赋值，因此当出现undefined时，会触发默认值。
+
+//圆括号内容
+//不得使用圆括号
+//变量声明
+//let [(a)] = [1];
+//let {x:(c)} = {};
+//let {(x:c)} = {};
+//let {(x):c} = {};
+
+//函数参数
+// function f([(z)]) {
+//     return z;
+// }
+// function f([z,(x)]) {
+//     return x;
+// }
+
+//赋值语句的模式
+//({p:a}) = {p:42};
+//([a]) = [5];
+//[({p:a}), {x:c}] = [{}, {}];
+//([a] = [5]);//不报错
+//[a] = ([5]);//不报错
+//[a] = [(5)];//不报错
+
+//可以使用圆括号的情况赋值语句的非模式部分
+// [(b)] = [3];
+// ({p:(d)} = {});
+// [(parseInt.prop)] = [3];
+
+//用途
+//交换变量的值
+// let x = 1;
+// let y = 2;
+// [x, y] = [y, x];
+// console.log(x);//2
+// console.log(y);//1
+
+//从函数返回多个值
+// function example() {
+//     return [1, 2, 3];
+// }
+// let [a, b ,c] = example();
+// console.log(example());//返回一个对象
+// function example() {
+//     return {
+//         foo : 1,
+//         bar : 2
+//     };
+// }
+// let {foo, bar} = example();
+// console.log(example());//{ foo: 1, bar: 2 }
+//要返回多个值，只能将它们放在数组或对象里返回
+
+//函数参数定义
+// function f([x, y, z]) {
+//
+// }
+// f([1, 2, 3]);//参数一组有次序的值
+// function f1({x, y, z}) {
+//
+// }
+// f1({x:1,z:3,y:2});//参数可以无次序
+
+//提取JSON数据
+// let jsonData = {
+//     id : 42,
+//     status : "OK",
+//     data : [867, 5309]
+// };
+// let {id, status, data:number} = jsonData;
+// console.log(id, status, number);
+
+//函数参数的默认值
+//就避免了在函数体内部再写var foo = config.foo || 'default foo'
+
+//遍历Map结构
+// const map = new Map();
+// map.set('first', 'hello');
+// map.set('second', 'world');
+// for(let [key, value] of map){
+//     console.log(key + " is " + value);
+// }
+// //任何部署了 Iterator 接口的对象，都可以用for...of循环遍历
+// for(let [key] of map){
+//
+// }//获取键名
+// for(let [, value] of map){
+//
+// }//获取键值
+
+//输入模块指定方法
