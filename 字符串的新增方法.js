@@ -12,6 +12,9 @@
 //2、String.raw()
 //转义斜杠，在斜杠前再加一个斜杠
 // console.log(String.raw`Hi\n${2+3}!`);//实际返回 "Hi\\n5!"，显示的是转义后的结果 "Hi\n5!"
+// console.log(`Hi\n${2+3}!`);
+// //Hi
+// //5!
 // console.log(String.raw`Hi\u000A!`);// 实际返回 "Hi\\u000A!"，显示的是转义后的结果 "Hi\u000A!"
 // console.log(String.raw`Hi\\n`);//实际返回 "Hi\\\\n"，显示Hi\\n，即每个斜杠都会进行一次转义
 
@@ -71,12 +74,15 @@
 //实例方法：normalize()
 //JS中原字符串码点与组成子字符串之和并不相等
 // console.log('\u01D1'==='\u004F\u030C' );//false
+// console.log('\u01D1');//Ǒ
+// console.log('\u004F\u030C');//Ǒ
 // console.log('\u01D1'.length);//1
 // console.log('\u004F\u030C'.length );//2
 // console.log('\u01D1'.normalize() === '\u004F\u030C'.normalize());//true
 // console.log(`\u004F\u030C`.normalize('NFC').length);//1 标准化合成，返回多个字符串的合成字符
 // console.log(`\u004F\u030C`.normalize('NFC'));//Ǒ \u01D1
 // console.log('\u01D1'.normalize('NFD').length);//2 标准化分解，返回合成字符分解的多个简单字符
+// console.log('\u01D1'.normalize('NFD'));//Ǒ
 //NFKC 语义上的合成
 //NFKD 语义上的分解
 //缺点：无法识别三个及三个以上字符的合成
@@ -86,6 +92,7 @@
 // let s = 'Hello, world!';
 // console.log(s.startsWith('Hello'));//true 字符串是否在原字符串头部
 // console.log(s.startsWith('He'));
+// console.log(s.startsWith('e'));//false
 // console.log(s.startsWith('Hello', 0));//支持查找开始的序号
 // console.log(s.startsWith('Hello', 1));//false
 // console.log(s.endsWith('!'));//true 参数字符串是否在原字符串尾部
@@ -99,20 +106,21 @@
 // console.log('o'.repeat(0));//""
 // console.log('na'.repeat(2.9));//nanana
 // console.log('na'.repeat(2.1));//四舍五入nana
-///console.log('na'.repeat(Infinity));//无穷报错
-//console.log('na'.repeat(-1));//负数报错
-//console.log('na'.repeat(-0.9));//取整为0
-//console.log('na'.repeat(NaN));//视为0
-//console.log('na'.repeat("2"));//进行字符串处理
+// console.log('na'.repeat(Infinity));//无穷报错
+//  console.log('na'.repeat(-1));//负数报错
+// console.log('na'.repeat(-0.9));//取整为0
+// console.log('na'.repeat(NaN));//视为0
+// console.log('na'.repeat("2"));//进行字符串处理
 
 
 //实例方法：padStart()，padEnd()
 // console.log('x'.padStart(5, "ad"));//adadx 头部进行补全，ad作为补全字符，x作为原字符
+// console.log('abcdefg'.padStart(5, "a"));//abcdefg
 // console.log('x'.padStart(4, 'ab'));//abax
 // console.log('x'.padStart(3,"abcdef"));//abx
 // console.log('x'.padEnd(5,'ab'));//xabab尾部补全
 // console.log('xxx'.padStart(2, 'ab'));//xxx 返回原字符串
-//console.log('abc'.padStart(10));//       abc，空格补全
+// console.log('abc'.padStart(10));//       abc，空格补全
 
 //常见用途
 //补全指定位数
@@ -122,13 +130,15 @@
 
 
 //实例方法：trimStart()，trimEnd()
-// const s = '  abc  ';
-// console.log(s.trim());//abc 去除空格
-// console.log(s.trimStart());//"abc  "去除头部空格
-// console.log(s.trimLeft());//"abc  "去除头部空格
-// console.log(s.trimEnd());//"  abc"去除尾部空格
-// console.log(s.trimRight());//"  abc"去除尾部空格
-// console.log(s.trim('a'));//abc 只能用于去除空格，传参无用但不报错
+const s = '  a bc  ';
+console.log(s.trim());//abc 去除空格
+console.log(s.trimStart());//"abc  "去除头部空格
+console.log(s.trimLeft());//"abc  "去除头部空格
+console.log(s.trimEnd());//"  abc"去除尾部空格
+console.log(s.trimRight());//"  abc"去除尾部空格
+console.log(s.trim('a'));//abc 只能用于去除空格，传参无用但不报错
+const x = '  a bc  ';
+console.log(s.trim());//a bc
 
 
 //实例方法：matchAll()正则表达式
