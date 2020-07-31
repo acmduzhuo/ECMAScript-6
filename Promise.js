@@ -63,18 +63,75 @@
 // console.log(getJSON("https://api.apiopen.top/recommendPoetry"));
 
 //异步加载图片
-function loadImageAsync(url) {
-    return new Promise(function(resolve, reject) {
-        const image = new Image();
-        image.onload = function() {
-            resolve(image);
-        };
+// function loadImageAsync(url) {
+//     return new Promise(function (resolve, reject) {
+//        const image = new Image();
+//        image.onload = function () {
+//            resolve(image);//加载成功，调用resolve方法
+//        };
+//         image.onerror = function () {
+//             reject(new Error('Could not image at ' + url));//失败调用reject
+//         };
+//         image.src = url;
+//     });
+// }
 
-        image.onerror = function() {
-            reject(new Error('Could not load image at ' + url));
-        };
+//实现Ajax操作
+// const getJSON = function (url) {
+//     const promise = new Promise(function (resolve, reject) {
+//         const handler = function () {
+//             if(this.readyState !== 4){
+//                 return ;
+//             }
+//             if(this.status === 200){
+//                 resolve(this.response);
+//             } else {
+//                 reject(new Error(this.statusText));
+//             }
+//         };
+//         const client = new XMLHttpRequest();
+//         client.open("GET",url);
+//         client.onreadystatechange = handler;
+//         client.responseType = "json";
+//         client.setRequestHeader("Accept", "application/json");
+//         client.send();
+//     });
+//     return promise;
+// };
+// getJSON("/post.json").then(function (json) {
+//     console.log('Contents:' + json);
+// }, function (error) {
+//     console.log('出错了', error);
+// })
 
-        image.src = url;
-    });
-}
-loadImageAsync("https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=%E7%9B%97%E5%A2%93%E7%AC%94%E8%AE%B0&step_word=&hs=0&pn=154&spn=0&di=53240&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=0&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=undefined&cs=1554479173%2C369057525&os=3800189175%2C3772963134&simid=0%2C0&adpicid=0&lpn=0&ln=1693&fr=&fmq=1596079436672_R&fm=&ic=undefined&s=undefined&hd=undefined&latest=undefined&copyright=undefined&se=&sme=&tab=0&width=undefined&height=undefined&face=undefined&ist=&jit=&cg=&bdtype=0&oriquery=&objurl=http%3A%2F%2Fi0.hdslb.com%2Fbfs%2Farticle%2Fe4635885bfb3eb29e3bc86d486e62c399ba8e263.jpg&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3Bktstktst_z%26e3Bv54AzdH3F6jw1AzdH3Fve899ld0bAzdH3F&gsm=99&rpstart=0&rpnum=0&islist=&querylist=&force=undefined");
+//resolve函数的参数还可以是另一个Promise实例
+// const p1 = new Promise(function (resolve, reject) {
+//     setTimeout(() =>reject(new Error('fail')), 3000);
+// })//p1是一个 Promise，3 秒之后变为rejected
+// const p2 = new Promise(function (resolve, reject) {
+//     setTimeout(()=>resolve(p1), 1000)
+// })//p2的状态在 1 秒之后改变，resolve方法返回的是p1。
+// p2
+//     .then(result => console.log(result))
+//     .catch(error => console.log(error));//又过了2 秒，p1变为rejected，导致触发catch方法指定的回调函数。
+
+//resolve或reject并不会终结Promise的参数函数执行
+// new Promise((resolve, reject) => {
+//     resolve(1);
+//     console.log(2);
+// }).then(r=>{
+//     //console.log("r="+r);//1
+//     console.log(r);
+// })//resolved 的 Promise 是在本轮事件循环的末尾执行，总是晚于本轮循环的同步任务。
+// 2
+// 1
+
+//调用resolve或reject以后，Promise 的使命就完成了
+//后继操作应该放到then方法里面，而不应该直接写在resolve或reject的后面
+// new Promise((resolve, reject) => {
+//     return resolve(1);
+//     console.log(2);//不输出
+// })
+
+
+//Promise.prototype.then()
