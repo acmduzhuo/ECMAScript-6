@@ -135,3 +135,28 @@
 
 
 //Promise.prototype.then()
+// getJSON("/posts.json").then(function (json) {
+//     return json.post;
+// }).then(function (post) {//then的方法是定义在原型对象Promise.prototype上的，为Promise实例添加状态改变时的回调函数
+//
+// });//链式写法，then方法返回的是一个新的Promise实例，then方法后面再调用另一个then方法
+
+//前一个回调函数，返回一个Promise对象，这时后一个回调函数，等该Promise对象状态发生变化，才会被调用
+// getJSON("/post/1.json").then(function (post) {
+//     return getJSON(post.commentURL);
+// }).then(function (comments) {
+//     console.log("resolved: ", comments);
+// },function (err) {
+//     console.log("rejected: ", err);
+// });//这个新的Promise对象状态发生变化。如果变为resolved，就调用第一个回调函数，如果状态变为rejected，就调用第二个回调函数。
+
+//箭头函数表示
+// getJSON("/post/1.json").then(
+//     post => getJSON(post.commentURL)
+// ).then(
+//     comments => console.log("resolved: ", comments),
+//     err => console.log("rejected: ", err)
+// );
+
+
+//Promise.prototype.catch()
