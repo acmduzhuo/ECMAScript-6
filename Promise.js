@@ -290,11 +290,11 @@
 // });//carry on
 
 //catch还能再抛出错误
-const someAsyncThing = function () {
-    return new Promise(function (resolve, reject) {
-        resolve(x + 2);//报错
-    });
-};
+// const someAsyncThing = function () {
+//     return new Promise(function (resolve, reject) {
+//         resolve(x + 2);//报错
+//     });
+// };
 // someAsyncThing().then(function () {
 //     return someAsyncThing();
 // }).catch(function (error) {
@@ -313,3 +313,47 @@ const someAsyncThing = function () {
 //     console.log('carrty on', error);
 // })//oh on ReferenceError: x is not defined
 //第二个catch()方法用来捕获前一个catch()方法抛出的错误。
+
+
+//Promise.prototype.finally()
+//不管Promise对象最后状态如何
+// promise
+//     .then(result=>{})
+//     .catch(error=>{})
+//     .finally(()=>{});//无论Promise最后状态，都会执行finally回调函数
+// server.listen(port)
+//     .then(function () {
+//
+//     })
+//     .finally(server.stop);//finally不接受参数，并不关心Promise对象的结果
+
+//finally是then的特例
+// promise
+//     .finally(()=>{
+//         //语句
+//     });
+//等同于
+// promise
+//     .then(
+//         result=>{
+//             return result;
+//         },
+//         error => {
+//             throw error;
+//         }
+//     );
+
+//实例
+// Promise.prototype.finally = function (callback) {
+//     let p = this.constructor;
+//     return this.then(
+//         value => P.resolve(callback()).then(()=>value),
+//         reason => P.resolve(callback()).then(()=>callback);
+//     );
+// };//不管Promise对象是fulfilled还是rejected，都会调用callback
+
+//finally方法总是会返回原来的值
+Promise.resolve(2).then(()=>{},()=>{});//undefined
+Promise.resolve(2).finally(()=>{});//2
+Promise.reject(3).then(() => {}, () => {})// reject 的值是 undefined
+Promise.reject(3).finally(() => {})// reject 的值是 3
