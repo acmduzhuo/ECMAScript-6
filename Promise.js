@@ -497,17 +497,17 @@
 // );
 
 //实例
-// var resolved = Promise.resolve(42);
-// // var rejected = Promise.reject(-1);
-// // var alsoRejected = Promise.reject(Infinity);
-// //
-// // Promise.any([resolved, rejected, alsoRejected]).then(function (result) {
-// //     console.log(result); // 42
-// // });//fulfilled
-// //
-// // Promise.any([rejected, alsoRejected]).catch(function (results) {
-// //     console.log(results); // [-1, Infinity]
-// // });//rejected
+//var resolved = Promise.resolve(42);
+// var rejected = Promise.reject(-1);
+// var alsoRejected = Promise.reject(Infinity);
+//
+// Promise.any([resolved, rejected, alsoRejected]).then(function (result) {
+//     console.log(result); // 42
+// });//fulfilled
+//
+// Promise.any([rejected, alsoRejected]).catch(function (results) {
+//     console.log(results); // [-1, Infinity]
+// });//rejected
 
 
 //Promise.resolve()
@@ -564,3 +564,75 @@
 //one
 // two
 // three
+
+//题外话
+// new Promise(resolve => {
+//     resolve(1);
+//     Promise.resolve({
+//         then: function(resolve, reject){
+//             console.log(2);
+//             resolve(3)
+//         }
+//     }).then(t => console.log(t))
+//     console.log(4);
+// }).then(t => console.log(t));
+// console.log(5);
+// 4
+// 5
+// 2
+// 1
+// 3
+
+// new Promise(resolve => {
+//
+//     resolve(1);
+//     new Promise(resolve=>{
+//         console.log(2);
+//         resolve(3)
+//     }).then((t) => console.log(t));
+//     console.log(4);
+// }).then(t => console.log(t));
+// console.log(5);
+// 2
+// 4
+// 5
+// 3
+// 1
+
+
+//Promise.reject()
+// const p = Promise.reject('出错了');
+// 等同于
+// const p = new Promise((resolve, reject) => reject('出错了'));
+// p.then(null, function (s) {
+//     console.log(s);//出错了
+// })
+
+//Promise.reject()方法的参数，会原封不动的作为reject的理由，变为后续方法的参数
+//Promise.resolve方法则不同，继承下来的是数据
+// const thenable = {
+//     then(resolve, reject){
+//         reject('出错了');
+//     }
+// };
+// Promise.reject(thenable)
+//     .catch(e=>{
+//         console.log(e === thenable);//true
+//     })//执行以后，后面catch方法的参数不是reject抛出的“出错了”这个字符串，而是thenable对象。
+
+
+//应用
+//加载图片
+// const preloadImage = function (path) {
+//     return new Promise(function (resolve, reject) {
+//         const image = new Image();
+//         image.onload = resolve;
+//         image.onerror = reject;
+//         image.src = path;
+//     });
+// };//一旦加载完成，Promise的状态就发生变化。
+
+
+//Promise.try()
+Promise.try()
+Promise.any()
