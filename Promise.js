@@ -394,17 +394,173 @@
 //   Error: 报错了]
 
 //如果p2没有自己的catch方法
-const p1 = new Promise((resolve, reject) => {
-    resolve('hello');
-})
-    .then(result => result);
-
-const p2 = new Promise((resolve, reject) => {
-    throw new Error('报错了');//p2的状态为reject
-})
-    .then(result => result);
-
-Promise.all([p1, p2])
-    .then(result => console.log(result))
-    .catch(e => console.log(e));//执行catch方法，输出第一个为reject的实例p2
+// const p1 = new Promise((resolve, reject) => {
+//     resolve('hello');
+// })
+//     .then(result => result);
+//
+// const p2 = new Promise((resolve, reject) => {
+//     throw new Error('报错了');//p2的状态为reject
+// })
+//     .then(result => result);
+//
+// Promise.all([p1, p2])
+//     .then(result => console.log(result))
+//     .catch(e => console.log(e));//执行catch方法，输出第一个为reject的实例p2
 //Error: 报错了
+
+
+//Promise.race()
+//只要有一个实例率先改变状态，p就会跟着改变，率先改变的Promise实例的返回值，就会传递给p的回调函数
+//参数同Promise.all()，如果不是Promise实例，那么就调用Promise.resolve()方法
+// const p = Promise.race([
+//     fetch('/resource-that-may-a-while'),
+//     new Promise(function (resolve, reject) {
+//         setTimeout(()=>reject(new Error('request timeout')), 5000)//五秒内未返回结构，p的状态就会变为rejected，从而触发catch
+//     })
+// ]);
+// p
+//     .then(console.log)
+//     .catch(console.error);
+
+
+//Promise.allSettled()
+//接受一组Promise实例作为参数，包装成一个新的Promise实例
+//只有等参数实例都返回结果，不管结果如何，包装实例才会结束
+// const promises = [
+//     fetch('/api-1'),
+//     fetch('/api-2'),
+//     fetch('/api-3'),
+// ];//等到三个请求都结束，不管请求结果如何，加载的滚动图标就会消失
+// await Promise.allSettled(promises);//返回新的实例，状态总是fulfilled
+// removeEventListener();//监听函数接受到的参数是一个数组，每个成员对应传入的Promise实例
+
+// const resolved = Promise.resolve(42);
+// const rejected = Promise.reject(-1);
+// const  allSettledPromise = Promise.allSettled([resolved,rejected]);//状态只能为fufilled
+// allSettledPromise.then(function (results) {
+//     console.log(results);//成员对应两个Promise实例
+// });
+
+//返回值用法的例子
+// const promises = [fetch('index.html'), fetch('https://does-not-exiset')];
+// const results = await Promise.allSettled(promises);
+//
+// const successfulPromises = results.filter(p => p.status === 'fulfilled');//过滤出成功的请求
+//
+// const errors = results
+//     .filter(p => p.status === 'rejected')
+//     .map(p => p.reason);//过滤出失败的请求，并输出原因
+//Promise.all方法
+// const urls = ['https://ababaab'];
+// const requests = urls.map(x => fetch(x));
+// try{
+//     await Promise.all(results);
+//     console.log('所有请求都成功。');
+// } catch {
+//     console.log('至少一个请求失败，其他的可能还没结束');
+// }
+
+
+//Promise.any()
+//接收一组Promise实例，包装成一个新的fufilled状态；
+//只要有一个fulfilled，包装实例就会变为fulfilled状态
+//如果都是rejected，包装实例就会变为rejected
+//尚未被所有浏览器支持，webstorm不具备提示信息
+// const promise = [
+//     fetch('a').then(()=>'a'),
+//     fetch('b').then(()=>'b'),
+//     fetch('c').then(()=>'c'),
+// ];
+// try {
+//     const first = await Promise.any(promise);
+//     console.log(first);//其中只要有一个变成fulfilled，Promise.any()返回的 Promise 对象就变成fulfilled。
+// } catch (error) {
+//     console.log(error);//如果所有三个操作都变成rejected，那么await命令就会抛出错误。
+// }
+
+//Promise.any()抛出的错误，是一个AggregateError 实例。它相当于一个数组，每个成员对应一个被rejected的操作所抛出的错误；
+//new AggregateError() extends Array -> AggregateError
+// const err = new AggregateError();
+// err.push(new Error("first error"));
+// err.push(new Error("second error"));
+// throw err;
+
+//捕捉错误的另一种写法
+// Promise.any(promises).then(
+//     (first) => {
+//         //一些为fulfilled
+//     },
+//     (error) => {
+//         //所有为rejected
+//     }
+// );
+
+//实例
+// var resolved = Promise.resolve(42);
+// // var rejected = Promise.reject(-1);
+// // var alsoRejected = Promise.reject(Infinity);
+// //
+// // Promise.any([resolved, rejected, alsoRejected]).then(function (result) {
+// //     console.log(result); // 42
+// // });//fulfilled
+// //
+// // Promise.any([rejected, alsoRejected]).catch(function (results) {
+// //     console.log(results); // [-1, Infinity]
+// // });//rejected
+
+
+//Promise.resolve()
+//转为Promise对象
+//const jsPromise = Promise.resolve($.ajax('/whatever.json'));
+//上面代码将 jQuery 生成的deferred对象，转为一个新的 Promise 对象。
+
+//等价写法
+// Promise.resolve('foo');
+// new Promise(resolve => resolve('foo'));
+
+//参数的四种情况
+//1、参数是一个Promise实例
+//不改动
+
+//2、参数是一个thenable对象
+//将其转为Promise对象，然后立即执行该对象的then方法
+// let thenable = {
+//     then:function (resolve, reject) {
+//         resolve(42);
+//     }
+// };
+// let p1 = Promise.resolve(thenable);
+// p1.then(function (value) {
+//     console.log(value);
+// });
+//thenable对象then方法执行后，对象p1变为resolved，
+//立即执行后面的then回调函数
+
+//3、参数不是具备then方法的对象，或者根本不是对象
+//返回一个新的Promise对象，状态为resolved
+// const p = Promise.resolve('Hello');
+// p.then(function (s) {
+//     console.log(s);//'Hello'
+// });
+//从一生成就是resolved状态，因此回调函数可以立即执行
+
+//不带有任何参数
+//Promise.resolve()方法允许调用时不带参数，直接返回一个resolved状态的 Promise 对象。
+// const p = Promise.resolve();
+// p.then(function () {
+//
+// })
+
+//立即resolve()的 Promise 对象，是在本轮“事件循环”（event loop）的结束时执行，而不是在下一轮“事件循环”的开始时。
+// setTimeout(function () {
+//     console.log('three');
+// }, 0);
+//
+// Promise.resolve().then(function () {
+//     console.log('two');
+// });
+// console.log('one');
+//one
+// two
+// three
