@@ -353,7 +353,58 @@
 // };//不管Promise对象是fulfilled还是rejected，都会调用callback
 
 //finally方法总是会返回原来的值
-Promise.resolve(2).then(()=>{},()=>{});//undefined
-Promise.resolve(2).finally(()=>{});//2
-Promise.reject(3).then(() => {}, () => {})// reject 的值是 undefined
-Promise.reject(3).finally(() => {})// reject 的值是 3
+// Promise.resolve(2).then(()=>{},()=>{});//undefined
+// Promise.resolve(2).finally(()=>{});//2
+// Promise.reject(3).then(() => {}, () => {})// reject 的值是 undefined
+// Promise.reject(3).finally(() => {})// reject 的值是 3
+
+//Promise.all()
+//将多个Promise实例，包装为一个新的Promise实例
+//const p = Promise.all([p1, p2, p3]);
+//如果这三个元素不都是Promise对象，则会调用Promise.sesolve方法，将参数转为Promise实例
+//参数可以不是数组，但是必须具有Iterator接口，且返回的每个成员都是Promise实例
+//p的状态由p1，p2，p3决定
+//三者均为fulfilled，p的状态才为fulfilled，三者返回值组成一个数组，传递给p的回调函数
+//只要有一个被rejected，p的状态就会变为rejected，第一个被reject的实例，会返回p的回调函数
+// const promise = [2, 3, 5, 7, 11, 13].map(function (id) {
+//     return getJSON('/post/' + id + ".json");
+// });
+// Promise.all(promise).then(function (posts) {
+// //
+// }).catch(function (reason) {
+//
+// })
+//只有6个都变为fulfilled或者其中一个变为rejected，才会调用Promise回调函数
+
+//如果作为参数的Promise实例，自己定义了catch方法，一旦被reject，那么并不会出发Promise.all中的catch
+// const p1 = new Promise((resolve, reject) => {
+//     resolve('hello');
+// })
+//     .then(result => result)
+//     .catch(e => e);
+// const p2 = new  Promise((resolve, reject) => {
+//     throw new Error('报错了');
+// })
+//     .then(result => result)
+//     .catch(e => e);//由于p2自己有catch，当error时，会执行catch方法，返回一个新的Promise对象，状态为resolved，
+// Promise.all([p1, p2])//两个参数均为resolved，所有调用then
+//     .then(result => console.log(result))
+//     .catch(e => console.log(e));
+//[ 'hello',
+//   Error: 报错了]
+
+//如果p2没有自己的catch方法
+const p1 = new Promise((resolve, reject) => {
+    resolve('hello');
+})
+    .then(result => result);
+
+const p2 = new Promise((resolve, reject) => {
+    throw new Error('报错了');//p2的状态为reject
+})
+    .then(result => result);
+
+Promise.all([p1, p2])
+    .then(result => console.log(result))
+    .catch(e => console.log(e));//执行catch方法，输出第一个为reject的实例p2
+//Error: 报错了
