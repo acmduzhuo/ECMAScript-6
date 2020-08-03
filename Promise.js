@@ -634,5 +634,48 @@
 
 
 //Promise.try()
-Promise.try()
-Promise.any()
+//不想区分f是同步函数还是异步函数，不管如何，then指定下一步流程，catch处理f抛出的错误
+//Promise.resolve().then(f)
+// const f = () => console.log('now');
+// Promise.resolve().then(f);
+// console.log('next');
+//next
+// now
+//缺点：如果函数是同步函数，那么会在本轮事件末尾执行
+
+//让同步函数同步执行，异步函数异步执行，并且让它们具有统一的 API
+//1、async
+// const f = () => console.log('now');
+// (async ()=>f())();
+// console.log('next');//立即执行，f是同步的
+//now
+// next
+//f是异步
+// (async ()=>f())()
+//     .then()
+//     .catch()//要加上，不然会吃掉f（）抛出的错误
+//2、new Promise
+// const f = () => console.log('now');
+// (
+//     () => new Promise(
+//         resolve => resolve(f())
+//     )
+// )();
+// console.log('next');//立即执行的匿名函数，
+// const f = () => console.log('now');
+// Promise.try(f);
+// console.log('next');
+// now
+// next
+
+//包装一下，更好地管理异常
+// function getUsername(userId) {
+//     return database.users.get({id: userId})
+//         .then(function(user) {
+//             return user.name;
+//         })
+//         .catch();
+// }
+//类似try和catch
+Promise.try(() => database.users.get({id: userId}))
+    .then().catch();
