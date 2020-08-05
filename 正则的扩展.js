@@ -73,3 +73,76 @@
 //（6）转义
 // console.log(/\,/);// /\,/ 不加转义无意义
 // console.log(/\,/u);//加上报错，那个加他干啥？？
+
+
+//RegExp.prototype.unicode
+//表示是否设置了u修饰符
+// const r1 = /hello/;
+// const r2 = /hello/u;
+// console.log(r1.unicode);//false
+// console.log(r2.unicode);//true
+//测试方法，遍历or其他
+//const r = /heu/;
+//console.log(r.unicode);//false 其他的判断方式
+
+
+//5、y修饰符
+//“黏连”修饰符
+// var s = 'aaa_aa_a';
+// var r1 = /a+/g;
+// var r2 = /a+/y;
+// console.log(r1.exec(s));//aaa
+// console.log(r2.exec(s));//aaa
+// console.log(r1.exec(s));//aa g只要剩余位置存在匹配就可以，所有输出aa
+// console.log(r2.exec(s));//null 但是y是从剩余的第一个位置开始，严格规定
+
+//改一下正则表达式，就能保证每次头部匹配
+// var s = 'aaa_aa_a';
+// var r = /a+_/y;
+// console.log(r.exec(s));//aaa_
+// console.log(r.exec(s));//aa_
+
+//使用lastIndex属性，可以更好的说明y修饰符
+//lastIndex指定每次搜索的位置，g修饰符从这个位置向后搜索，直到发现匹配为止
+// const  REGEX = /a/g;
+// REGEX.lastIndex = 2;
+// const match = REGEX.exec('xaya');
+// console.log(match)//a
+// console.log(match.index);//3 在3号位置匹配成功
+// console.log(REGEX.lastIndex);//4 下次匹配从4号位开始
+// console.log(REGEX.exec('xaya'));//null
+
+//y修饰符同样遵守，但是要求必须在lastIndex指定的位置发现匹配
+// const REGEX = /a/y;
+// REGEX.lastIndex = 2;
+// console.log(REGEX.exec('xaya'));//null
+// console.log(REGEX.lastIndex);//注意失败不会自动后移
+// REGEX.lastIndex = 3
+// const match = REGEX.exec('xaya');
+// console.log(match.index);//3
+// console.log(REGEX.lastIndex);//只有匹配成功才会后移
+
+//由此可以推断，y修饰符隐含了^标志
+//console.log(/b/y.exec('abc'));//null
+
+//const REGEX = /a/gy;
+//console.log('aaxa'.replace(REGEX, '-'));//--xa因为最后一个a不是在下一次匹配的头部
+
+// console.log('a1a2a3'.match(/a\d/y));//a1只返回第一个匹配
+// console.log('a1a2a3'.match(/a\d/gy));//a1 a2 a3
+// console.log('a1ea2a3'.match(/a\d/gy));//[ 'a1' ]//与g修饰符联用，才能返回所有匹配。
+
+const TOKEN_Y = /\s*(\+|[0-9]+)\s*/y;
+const TOKEN_G  = /\s*(\+|[0-9]+)\s*/g;
+function tokenize(TOKEN_REGEX, str) {
+    let result = [];
+    let match;
+    while (match = TOKEN_REGEX.exec(str)) {
+        result.push(match[1]);
+    }
+    return result;
+}
+console.log(tokenize(TOKEN_Y, '3x + 4'));// [ '3' ]
+console.log(tokenize(TOKEN_G, '3x + 4'));//[ '3', '+', '4' ]
+//y修饰符确保了匹配之间不会有漏掉的字符。
+//旦出现非法字符y就会终止
