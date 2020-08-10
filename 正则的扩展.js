@@ -132,17 +132,70 @@
 // console.log('a1a2a3'.match(/a\d/gy));//a1 a2 a3
 // console.log('a1ea2a3'.match(/a\d/gy));//[ 'a1' ]//与g修饰符联用，才能返回所有匹配。
 
-const TOKEN_Y = /\s*(\+|[0-9]+)\s*/y;
-const TOKEN_G  = /\s*(\+|[0-9]+)\s*/g;
-function tokenize(TOKEN_REGEX, str) {
-    let result = [];
-    let match;
-    while (match = TOKEN_REGEX.exec(str)) {
-        result.push(match[1]);
-    }
-    return result;
-}
-console.log(tokenize(TOKEN_Y, '3x + 4'));// [ '3' ]
-console.log(tokenize(TOKEN_G, '3x + 4'));//[ '3', '+', '4' ]
+// const TOKEN_Y = /\s*(\+|[0-9]+)\s*/y;
+// const TOKEN_G  = /\s*(\+|[0-9]+)\s*/g;
+// function tokenize(TOKEN_REGEX, str) {
+//     let result = [];
+//     let match;
+//     while (match = TOKEN_REGEX.exec(str)) {
+//         result.push(match[1]);
+//     }
+//     return result;
+// }
+// console.log(tokenize(TOKEN_Y, '3x + 4'));// [ '3' ]
+// console.log(tokenize(TOKEN_G, '3x + 4'));//[ '3', '+', '4' ]
 //y修饰符确保了匹配之间不会有漏掉的字符。
 //旦出现非法字符y就会终止
+
+
+//6、RegExp.prototype.flags
+//表示是否设置了y修饰符
+// var r = /hello\d/y;
+// console.log(r.sticky);//非字符串遍历
+// var s = /xyz\d/;
+// console.log(s.sticky);//false
+
+
+//7、RegExp.prototype.flags
+//console.log(/abc/ig.source);//abc//返回正则表达式的正文
+//console.log(/abc/ig.flags);//gi//返回正则表达式的修饰符
+
+
+//8、s修饰符：dotAll模式
+//在正则表达式中，.是一个特殊字符，可以代表任何单个字符
+//除四个字节的UTF-16字符，可以用u修饰符来解决
+//一个是行终结符
+// U+000A 换行符（\n）
+// U+000D 回车符（\r）
+// U+2028 行分隔符（line separator）
+// U+2029 段分隔符（paragraph separator）
+//console.log(/foo.bar/.test('foo\nbar'))//false .与换行符不匹配
+
+//console.log(/foo[^]bar/.test('foo\nbar'));//true 匹配任意单个字符
+
+//s修饰符
+//console.log(/foo.bar/s.test('foo\nbar'))//true 可以任意匹配单个字符
+
+//dotAll属性
+// const re = /foo.bar/s;
+// console.log(re.test('foo\nbar'));//true
+// console.log(re.dotAll);//true 判断正则表达式是否处在dotAll模式
+// console.log(re.flags);//s修饰符
+
+
+//9、后行断言
+//JS中只支持先行断言和先行否定断言
+//ES2018引入后行断言和后行否定断言
+// console.log(/\d+(?=%)/.exec('100% of US')[0]);//在%之前匹配
+// console.log(/\d+(?!%)/.exec('that’s all 44 of them')[0])//44 不在%之前匹配
+
+//后行断言
+//console.log(/(?<=\$)\d+/.exec('Benjamin Franklin is on the $100 bill')[0]);//100 在$之后匹配
+//console.log(/(?<!\$)\d+/.exec('it’s is worth about €90')[0]);//90 只匹配不在$后
+
+//利用后行断言进行字符串替换
+//只有紧挨美元后面的foo才会被替换
+// const Re = /(?<=\$)foo/g;
+// console.log('$foo %foo foo'.replace(Re, 'bar'));//$bar %foo foo
+
+console.log(/(?<=(\d+)(\d+))$/.exec('1053'));
