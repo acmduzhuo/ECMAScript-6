@@ -232,3 +232,119 @@
 
 
 //11、具名组匹配
+// const Re = /(\d{4})-(\d{2})-(\d{2})/;
+// const matchObj = Re.exec('1999-12-31')
+// const year = matchObj[1];
+// const month = matchObj[2];
+// const day = matchObj[3];
+// console.log(year);//提取三组匹配结果
+// console.log(month);
+// console.log(day);
+//缺点：当顺序改变后，对应的序号也要改变
+
+// const Re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/
+// const matchObj = Re.exec('1999-12-31');
+// const year = matchObj.groups.year;
+// const month = matchObj.groups.month;
+// const day = matchObj.groups.day;
+// console.log(matchObj.groups);//[Object: null prototype] { year: '1999', month: '12', day: '31' }
+// console.log(year);//1999
+// console.log(month);//12
+// console.log(day);//31
+//数字序号（matchObj[1]）依然有效。
+
+//如果具名组没有匹配，对应的group就会是undefined
+// const Re = /^(?<as>a+)?$/;
+// const matchObj = Re.exec('');
+// console.log(matchObj.groups.as);//undefined
+// console.log('as' in matchObj.groups);//true 键名是在的
+
+//解构赋值和替换
+// let {groups:{one, two}} = /^(?<one>.*):(?<two>.*)$/.exec('foo:bar')//注意：必须是groups
+// console.log(one);//foo
+// console.log(two);//bar
+
+// let re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/u;
+// console.log('2015-01-02'.replace(re, '$<day>/$<month>/$<year>'));// '02/01/2015'
+//字符串替换时，使用$<组名>引用具名组。
+//第二个参数是一个字符串，而不是正则表达式
+
+//第二个参数也可以是函数
+// let re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/u;
+// console.log('2015-01-02'.replace(re, (
+//     matched,//整个匹配的结果
+//     capture1,//第一个组的匹配 2015
+//     capture2,//第二个组的匹配 01
+//     capture3,//第三个组的匹配 02
+//     position,//匹配开始的位置 0
+//     S,// 原字符串2015-01-02
+//     groups //具名组构成的一个对象
+// ) =>{//内容缺一不可
+//     let {day, month, year} = groups;
+//     return `${day}/${month}/${year}`;
+// }));//02/01/2015
+
+//引用
+//如果要在正则表达式内部引用某个“具名组匹配”，可以使用\k<组名>的写法。
+// const Re = /^(?<word>[a-z]+)!\k<word>$/u;//实现具名组匹配的复用
+// console.log(Re.test('abc!abc'));//true
+// console.log(Re.test('abc!ab'));//false
+//\1仍然后效
+// const Re = /^(?<word>[a-z]+)!\1$/u;
+// console.log(Re.test('abc!ab'));//false
+//两种语法同时使用
+// const Re = /^(?<word>[a-z]+)!\1!\k<word>$/u;
+// console.log(Re.test('abc!abc!abc'))//true
+
+
+//12、正则匹配索引
+// const text = 'zabbcdef';
+// const re = /ab/;
+// const result = re.exec(text);
+// console.log(result.index);
+// console.log(result.indices);//返回开始位置和结束位置，但是这里并未出现[ [1, 3] ]
+//匹配结果为ab，分别是原始字符串的第1位和第2位，那么结束位置就是第3位。
+// const text = 'zabbcdef';
+// const re = /ab+(cd)/;
+// const result = re.exec(text);
+// console.log(result.indices );//[ [ 1, 6 ], [ 4, 6 ] ]
+//整个匹配的结果和组匹配的结果
+
+// const text = 'zabbcdef';
+// const re = /ab+(?<Z>cd)/u;
+// const result = re.exec(text);
+// console.log(result.indices.groups);//{ Z: [ 4, 6 ] }
+//输出具名组匹配的开始和结束位置
+//console.log(result.indices.groups['Z']);//精确到该名称
+//若无则返回undefined
+
+
+//13、String.prototype.matchAll()
+//引入
+//一个正则表达式字符串中多个匹配，一般使用g或者y修饰符逐一取出
+// var regex = /t(e)(st(\d?))/g;
+// var string = 'test1test2test3';
+// var matches = [];
+// var match;
+// while(match = regex.exec(string)){
+//     matches.push(match);
+// }
+// console.log(matches);
+
+//一次性取出
+var regex = /t(e)(st(\d?))/g;
+var string = 'test1test2test3';
+var match;
+for(match of string.matchAll(regex)){
+    console.log(match);
+}
+// ["test1", "e", "st1", "1", index: 0, input: "test1test2test3"]
+// ["test2", "e", "st2", "2", index: 5, input: "test1test2test3"]
+// ["test3", "e", "st3", "3", index: 10, input: "test1test2test3"]
+//返回的是一个遍历器
+//又一个不支持的
+// 转为数组的方法一
+[...string.matchAll(regex)]
+
+// 转为数组的方法二
+Array.from(string.matchAll(regex))
