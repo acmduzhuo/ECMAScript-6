@@ -198,4 +198,37 @@
 // const Re = /(?<=\$)foo/g;
 // console.log('$foo %foo foo'.replace(Re, 'bar'));//$bar %foo foo
 
-console.log(/(?<=(\d+)(\d+))$/.exec('1053'));
+//console.log(/(?<=(\d+)(\d+))$/.exec('1053'));//[ '', '1', '053']
+//先匹配的是/$/，结果是啥都没有，注意是空字符串，并非null
+//其次从右向左匹配，所以第一个括号是单个字符，第二个括号是贪婪匹配
+// console.log(/$/.exec('1053'));//[ '', index: 4, input: '1053', groups: undefined ]
+// console.log(/^(\d+)(\d+)$/.exec('1053'));//[ '1053', '105', '3']
+//顺序匹配，先从/^$/开始，然后第一个括号贪婪匹配，第二个括号单个匹配
+
+// console.log(/(?<=(o)d\1)r/.exec('hodor'));//null 上面代码中，如果后行断言的反斜杠引用（\1）放在括号的后面，就不会得到匹配结果.
+// console.log(/(?<=\1d(o))r/.exec('hodor'));//[ 'r', 'o'] 必须放在前面才可以。因为后行断言是先从左到右扫描，发现匹配以后再回过头，从右到左完成反斜杠引用。
+// console.log(/r/.exec('hodor'))//[ 'r' ]
+
+
+//10、Unicode属性类
+// const re = /\p{Script=Greek}/u;//指定希腊文字母
+// console.log(re.test('π'));//true
+// 指定\p{UnicodePropertyName=UnicodePropertyValue}
+
+// const re = /^\p{Decimal_Number}+$/u;
+// console.log(re.test('𝟏𝟐𝟑𝟜𝟝𝟞𝟩𝟪𝟫𝟬𝟭𝟮𝟯𝟺𝟻𝟼'));//所有十进制字符
+
+//匹配罗马数字
+// const re = /^\p{Number}+$/u;
+// console.log(re.test('²³¹¼½¾'));
+// console.log(re.test('㉛㉜㉝')); // true
+// console.log(re.test('ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ'));
+
+//其他例子
+// const re = /\p{White_Space}/u;
+// console.log(re.test('  oo  '));
+// const re = /[\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Connector_Punctuation}\p{Join_Control}]/u;//匹配各种文字的字母，相当于\w
+// console.log(re.test('acz'));
+
+
+//11、具名组匹配
