@@ -145,18 +145,120 @@
 //Number.isSafeInteger会返回结果，显示计算结果是安全的。这是因为，这个数超出了精度范围，导致在计算机内部，以9007199254740992的形式储存。
 
 //不止验证结果
-function trusty (left, right, result) {
-    if (
-        Number.isSafeInteger(left) &&
-        Number.isSafeInteger(right) &&
-        Number.isSafeInteger(result)
-    ) {
-        return result;
-    }
-    throw new RangeError('Operation cannot be trusted!');
-}
+// function trusty (left, right, result) {
+//     if (
+//         Number.isSafeInteger(left) &&
+//         Number.isSafeInteger(right) &&
+//         Number.isSafeInteger(result)
+//     ) {
+//         return result;
+//     }
+//     throw new RangeError('Operation cannot be trusted!');
+// }
+// trusty(9007199254740993, 990, 9007199254740993 - 990)// RangeError: Operation cannot be trusted!
+// trusty(1, 2, 3)
 
-trusty(9007199254740993, 990, 9007199254740993 - 990)
-// RangeError: Operation cannot be trusted!
 
-trusty(1, 2, 3)
+//7、Math对象的扩展
+//Math.trunc()去除一个数的小数部分，返回整数部分
+// console.log(Math.trunc(4.1));//4
+// console.log(Math.trunc(4.9));//4
+// console.log(Math.trunc(-4.1));//-4
+// console.log(Math.trunc(-4.9));//-4
+// console.log(Math.trunc(-0.1));//-0 比较蠢
+// console.log(Math.trunc(0.1));//0
+//console.log(Math.trunc(0.0.1));//报错
+//console.log(Math.trunc( .1));//0
+// console.log(Math.trunc(1 .0));//报错
+//非数值
+//Math.trunc()先将其转化为数值，然后再进行操作
+// console.log(Math.trunc('123.456'));//123
+// console.log(Math.trunc(true))//1
+// console.log(Math.trunc(false))//0
+// console.log(Math.trunc(null))//0
+
+//对于空值和无法截取到整数的值，返回NaN
+// console.log(Math.trunc(NaN))//NaN
+// console.log(Math.trunc('foo'))
+// console.log((Math.trunc('a1')))//NaN
+// console.log(Math.trunc())//NaN
+// console.log(Math.trunc(undefined));//NaN
+
+//代码模拟
+// console.log(Math.ceil(1.2));
+// Math.trunc = Math.trunc || function (x) {
+//     return x < 0 ? Math.ceil(x) : Math.floor(x);
+//     //向上取整， 向下取整
+// }
+
+//Math.sign() 判断一个数字是正还是负，还是0
+// 参数为正数，返回+1；
+// 参数为负数，返回-1；
+// 参数为 0，返回0；
+// 参数为-0，返回-0;
+// 其他值，返回NaN。
+// console.log(Math.sign(-5));//-1
+// console.log(Math.sign(5));//+1
+// console.log(Math.sign(0.1))//+1
+// console.log(Math.sign(-0.9));//-1
+// console.log(Math.sign(0));//0
+// console.log(Math.sign(-0));//-0 想不出来这个存在有啥意义
+// console.log(Math.sign(NaN));//NaN
+// console.log(Math.sign(null));//0
+// console.log(Math.sign('a'));//NaN
+// console.log(Math.sign());//NaN
+
+//如果是非数值，则会自动转为数值，对于无法转为数值的，则返回NaN
+// console.log(Math.sign(''));//0
+// console.log(Math.sign(true));//1
+// console.log(Math.sign(false));//0
+// console.log(Math.sign(null))//0
+// console.log(Math.sign('9'));//9
+// console.log(Math.sign('foo'));//NaN
+// console.log(Math.sign(undefined));//NaN
+// console.log(Math.sign('a9'));//NaN
+
+//代码模拟
+// var a = '3';
+// console.log(+a);//3 字符转数字
+// var b = 'a2';
+// console.log(+b);//NaN
+
+// Math.sign = Math.sign || function (x) {
+//     x = +x;
+//     if(x==0 || isNaN(x)){
+//         return x;
+//     }
+//     return x>0 ? 1 : -1;
+// }
+
+//题外话，测试一下
+// for(let i=0;i<5;i++){
+//     if(!i){
+//         console.log("测试成功");
+//     }else {
+//         continue;
+//     }
+// }//测试成功，0代表！
+
+//Math.cbrt()计算一个数的立方根
+// console.log(Math.cbrt(-1));//-1
+// console.log(Math.cbrt(0));//0
+// console.log(Math.cbrt(1));//1
+// console.log(Math.cbrt(2));//1.2599210498948732
+
+//对于非数值，内部先使用number先将其转为数值
+//对于无法转为数值的，返回NaN
+// console.log(Math.cbrt('8'));//2
+// console.log(Math.cbrt(null))//0
+// console.log(Math.cbrt('hello'));//NaN
+
+//代码部署
+// Math.cbrt = Math.cbrt || function () {
+//     var y = Math.pow(Math.abs(x), 1/3);
+//     return x < 0 ? -y : y;
+// };
+//题外话，测试pow是否不接收负数
+// console.log(Math.pow(-8, 1/3));//NaN
+// console.log(Math.pow(-8, -1));//-0.125
+//结论，pow对于开方，只接受整数
