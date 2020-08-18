@@ -262,3 +262,114 @@
 // console.log(Math.pow(-8, 1/3));//NaN
 // console.log(Math.pow(-8, -1));//-0.125
 //结论，pow对于开方，只接受整数
+// var count = 5;
+// start : for(var i=0;i<count;i++){
+//     if(i === 4){
+//         break start
+//     }
+//     console.log(i)
+// }
+
+//var arr = [1, '2', 3, null, '4', undefined];
+// var arr = {
+//     0: 1,
+//     1:'2',
+//     2: 3,
+//     3: null,
+//     4: '4',
+//     5: undefined
+// }
+// for(var i in arr){
+//     console.log(i);
+// }
+// 0
+// 1
+// 2
+// 3
+// 4
+// 5
+// var dog = {
+//     name : '大黄',
+//     age : 5,
+//     gender : '雄性',
+// }
+// dog.color = 'black';
+// dog.age = 6;
+// Object.prototype.objCustom = function () {
+//     return 'aaa';
+// }
+// for(var i in dog){
+//     console.log(i, `:`,dog[i]);
+// }
+// name : 大黄
+// age : 6
+// gender : 雄性
+// color : black
+// objCustom : function () {
+//     return 'aaa';
+// }
+// name
+// age
+// gender
+// var arr = undefined
+// for(var i in arr){
+//     console.log(i);
+// }
+
+// Array.prototype.myfunction = function () {
+//     return 'aaa';
+// }
+// var dog = [
+//     {name:'小黄', age : 3},
+//     {name:'小黑', age : 4},
+//     {name:'小白', age : 5}
+// ]
+// for(var i in dog){
+//     if(!dog.hasOwnProperty(i)){
+//         continue;
+//     }
+//     console.log(dog[i].name)
+// }
+// console.log('这是一行空值测试~')
+
+// var arr = [1, '2', null, 3, undefined, '4'];
+// for(var i of arr){
+//     console.log(i);
+// }
+// 1
+// 2
+// null
+// 3
+// undefined
+// 4
+// var obj = {
+//     name : '小黄',
+//     age : 4,
+//     gender : 'black'
+// };
+// for(var j of Object.keys(obj)){
+//     console.log(j);
+// }
+// name
+// age
+// gender
+// var 1set = new Set();
+// set.add("a").add("b").add("d").add("c");
+// var map = new Map();
+// map.set("a",1).set("b",2).set(999,3);
+// for (let v of set) {
+//     console.log(v);
+// }
+// console.log("--------------------");
+// for(let [k,v] of map) {
+//     console.log(k,v);
+// }
+
+var array = ['a', 123, {a:'1', b:'2'}];
+array.name = '小黄';
+for(var i of array){
+    console.log(i);
+}
+// a
+// 123
+// { a: '1', b: '2' }
