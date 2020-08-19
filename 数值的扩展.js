@@ -512,3 +512,108 @@
 // console.log(Math.pow(2, 53) + 1);//9007199254740992
 // console.log(Math.pow(2, 53) === Math.pow(2, 53)+1);//true
 //BigInt(大整数) 只用来表示整数，没有位数的限制，任何位数的整数都可以精确表示。
+//转换规则与Number相同
+// const a = 2172141653n;
+// const b = 15346349309n;
+// console.log(a * b);//33334444555566667777n 正常运行
+// console.log(Number(a) * Number(b));//33334444555566670000 普通整数则无法保持精度
+// console.log(Number(a * b));//33334444555566670000也会丢失，不如toString
+// var str;
+// str = (a*b).toString();
+// console.log(str);//33334444555566667777
+
+//与Number区别，后缀n
+// console.log(typeof 1234);//number
+// console.log(typeof 1234n)//bigint
+// console.log(1n + 2n);//大整数计算
+// console.log(0b1101n);//13n 二进制
+// console.log(0o777n);//511n 八进制
+// console.log(0xFFn);//255n 十六进制
+
+//但是该类型与普通整数并不想同，是两种类型的值
+// console.log(12 === 12n);
+// console.log(12 == 12n);
+
+//可以使用负号，但是正号报错
+// console.log(-12n);//-12
+// console.log(+12n);//报错
+
+// 对于使用Number类型的值会溢出，但是使用bigint则不会
+// let p = 1n;
+// for(let i=1n; i<=70n;i++){
+//     p *= i;
+// }
+// console.log(p);//11978571669969891796072783721689098736458938142546425857555362864628009582789845319680000000000000000n
+
+//BigInt对象
+// console.log(BigInt(123));//123n
+// console.log(BigInt('123'));//123n
+// console.log(BigInt(false));//0n
+// console.log(BigInt(true));//1n
+
+//要求必须要有参数，而且必须可以正常转为数值
+// console.log(new BigInt());//报错
+// console.log(BigInt(undefined));//报错
+// console.log(BigInt(null));//报错
+// console.log(BigInt('123n'));//报错
+// console.log(BigInt('abc'));//报错
+
+//小数也会报错
+// console.log(BigInt(1.5));//报错
+// console.log(BigInt('1.5'));//报错
+
+//BigInt对象继承了Object对象的两个实例方法
+//BigInt.prototype.toString()
+//BigInt.prototype.valueOf()
+//继承了Number对象的一个实例方法
+// BigInt.prototype.toLocaleString()
+//此外还提供了三个静态方法
+// BigInt.asUintN(width, BigInt)//给定的 BigInt 转为 0 到 2width - 1 之间对应的值。
+// BigInt.asIntN(width, BigInt)//给定的 BigInt 转为 -2width - 1 到 2width - 1 - 1 之间对应的值。
+// BigInt.parseInt(string[, radix])//近似于Number.parseInt()，将一个字符串转换成指定进制的 BigInt。
+// console.log(2n ** 63n - 1n);//9223372036854775807n
+// console.log(2 ** 63 - 1);//9223372036854776000
+
+//转换规则
+// console.log(Boolean(0n));//false
+// console.log(Boolean(1n));//true
+// console.log(Boolean(2n));//true
+// console.log(Number(1n));//1
+// console.log(String(1n));//"1"
+// console.log(!0n);//true
+// console.log(!1n);//false
+// console.log(!2n);//false
+
+//小插曲，验证 / 的运算
+// var num = 11;
+// var sum = "";
+// while (num >= 1){
+//     //console.log(num%10);
+//     sum += num%10
+//     num = parseInt(num/10);
+//     console.log(`num = `, num);
+// }
+// console.log(sum);
+
+///运算方面BigInt类型与+ - * **一致，/会返回整数
+// console.log(9n / 5n);//1n
+//不带符号>>>运算符无意义
+// console.log(1n >>> 1);//报错
+// console.log(+1n);//报错
+//与其他普通数值运算报错
+// console.log(1n + 1);//报错
+//参数预期是Number，传入BigInt报错
+// console.log(Math.sqrt(4n));//报错
+// console.log(Math.sqrt(Number(4n)));//2
+// console.log(10 | 0);
+// console.log((1n | 0));//报错
+
+//其他运算
+// if(0n){
+//     console.log(0)
+// }else {
+//     console.log(1);//1
+// }
+// console.log('a'+123n);//a123n
+// console.log(0n<1);
+// console.log(0n<true);
