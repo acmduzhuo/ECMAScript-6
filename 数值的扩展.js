@@ -365,11 +365,150 @@
 //     console.log(k,v);
 // }
 
-var array = ['a', 123, {a:'1', b:'2'}];
-array.name = '小黄';
-for(var i of array){
-    console.log(i);
-}
+// var array = ['a', 123, {a:'1', b:'2'}];
+// array.name = '小黄';
+// for(var i of array){
+//     console.log(i);
+// }
 // a
 // 123
 // { a: '1', b: '2' }
+
+// Math.clz32()
+// 将参数转为32位无符号整数形式，然后返回这个32位值里面有多少个前导0
+// console.log(Math.clz32(0)) //32 0的二进制全为0，所以有32个前导
+// console.log(Math.clz32(1));//31
+// console.log(Math.clz32(1000))//22
+// console.log(Math.clz32(0b01000000000000000000000000000000));//1
+
+//<<左运算符号
+// console.log(Math.clz32(0));
+// console.log(Math.clz32(1));
+// console.log(Math.clz32(1 << 1));//30
+// console.log(Math.clz32(1<<2));//29
+// console.log(Math.clz32(1<<29));//2
+// console.log(Math.clz32(2));//30
+// console.log(Math.clz32(2 >> 1))//31
+
+//对于小数，只考虑整数部分
+// console.log(Math.clz32(3.2));//30
+// console.log(Math.clz32(3.9));//30
+
+//负数表示为0，无论任何负数
+// console.log(Math.clz32(-1));//0
+// console.log(Math.clz32(-8));//0
+
+
+//Math.imul()
+//返回两个数以32位带符号整数形式想乘的结果，返回的也是一个32位的带符号整数
+// console.log(Math.imul(2, 4));//8
+// console.log(Math.imul(-1, 8));//-8
+// console.log(Math.imul(-2, -2));//4
+//但是超过32位的部分就会溢出，但是会返回正确的地位数值
+// console.log(Math.imul(0x7fffffff,0x7fffffff));//1
+// 由于这两个二进制数的最低位都是1，因此结果最低位也是1,
+
+// Math.fround()
+// 但会一个数的32位单精度浮点数形式
+// -2^24 至 2^24之间，开区间
+// console.log(Math.fround(0));//0
+// console.log(Math.fround(1));
+// console.log(Math.fround(2 ** 24));//16777216
+// console.log(Math.fround(2 ** 24 + 1));//16777216 精度丢失
+// console.log(2 ** 24 + 1);//16777217
+//Math.fround方法的主要作用，是将64位双精度浮点数转为32位单精度浮点数
+//如果小数的精度超过24个二进制位，返回值就会不同于原值，否则返回值不变
+// console.log(Math.fround(1.125));//1.125
+// console.log(Math.fround(7.25));//7.25
+//精度丢失
+// console.log(Math.fround(0.3))//0.30000001192092896
+// console.log(Math.fround(0.7));//0.699999988079071
+// console.log(Math.fround(1.0000000123));//1
+
+//非数值的处理
+// console.log(Math.fround(NaN));//NaN
+// console.log(Math.fround(Infinity))//Infinity
+// console.log(Math.fround('5'));//5
+// console.log(Math.fround(true));//1
+// console.log(Math.fround('0.2'));//0.20000000298023224
+// console.log(Math.fround([]));//0
+// console.log(Math.fround({}));//NaN
+
+//代码模拟
+// Math.fround = function (x) {
+//     return new Float32Array([x])[0];
+// }
+// var a = new Float32Array([0.1])[0]
+// console.log(a);
+
+//Math.hypot() 返回所有参数的平方和平方根 勾股定理
+// console.log(Math.hypot(3, 4));//5
+// console.log(Math.hypot(3, 4, 5));//7.0710678118654755 接受多个参数
+// console.log(Math.hypot());//0
+// console.log(Math.hypot(3, 4, 'foo'));//NaN
+// console.log(Math.hypot(3, 4, '5'));//7.0710678118654755 可以将非数值转为数值
+// console.log(Math.hypot(-3));//3 相当于abs
+// console.log(Math.hypot(Infinity));//Infinity
+
+//对数方法
+//(1)Math.expm1()
+//返回ex - 1
+// console.log(Math.expm1(-1));//-0.6321205588285577
+// console.log(Math.expm1(0));//0
+// console.log(Math.expm1(1));//1.718281828459045
+//模拟
+// Math.expm1 = function (x) {
+//     return Math.exp(x) -1;
+// }
+
+//(1)Math.log1p()
+// Math.log(1+x) 相当于In(1+x)
+//返回自然对数1 + x的自然对数，如果x小于-1，返回NaN
+// console.log(Math.log1p(1));//0.6931471805599453
+// console.log(Math.log1p(9));//2.302585092994046
+// console.log(Math.log1p(-1));//-Infinity
+// console.log(Math.log1p(-2));//-NaN
+//代码模拟
+// Math.log1p = function (x) {
+//     return Math.log(1 + x);
+// }
+
+//Math.log10()
+//返回以10为底x的对象
+// console.log(Math.log10(10));
+// console.log(Math.LN10); // Math.LN10 = loge10 2.302585092994046
+//部署
+// Math.log10 -= function (x) {
+//     return Math.log(10) / Math.LN10;
+// }
+
+//(4)Math.log2()
+//返回以2为底的x的对数
+// console.log(Math.log2(3));
+// console.log(Math.log2(0));//-Infinity
+//代码模拟
+// Math.log2 = function (x) {
+//     return Math.log(x) / Math.LN2;
+// }
+
+//双曲线函数方法
+
+
+//8.指数运算符
+//console.log(2 ** 3);//8
+//不同于以往的左结合，指数运算符是右连接
+//console.log(2 ** 3 ** 2);//512 等于(2 ** (3**2))
+//与等号结合
+// var a = 2;
+// a **= 3;
+// console.log(a);//8
+
+
+//9.BigInt数据类型
+//JS存在数值限制
+//精度为53个二进制
+//整数范围是2^53
+// console.log(Math.pow(2,53));//9007199254740992
+// console.log(Math.pow(2, 53) + 1);//9007199254740992
+// console.log(Math.pow(2, 53) === Math.pow(2, 53)+1);//true
+//BigInt(大整数) 只用来表示整数，没有位数的限制，任何位数的整数都可以精确表示。
