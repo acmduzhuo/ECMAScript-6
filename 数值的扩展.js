@@ -617,3 +617,95 @@
 // console.log('a'+123n);//a123n
 // console.log(0n<1);
 // console.log(0n<true);
+
+// console.log(Math.pow(2, 53));//9007199254740992
+// console.log(Math.pow(2,100) + 1);//9007199254740992
+// console.log(-Math.pow(2, 53));//-9007199254740992
+// console.log(-Math.pow(2, 53) - 1);//-9007199254740992
+// console.log(1.2676506002282294e+30);
+
+// var n = 100n;
+// var num = 1n;
+// for(let i=1n;i<=n;i++){
+//     num *= i;
+// }
+// console.log(num);
+// var n = 100;
+// var num = 1;
+// for(let i=1;i<=n;i++){
+//     num *= i;
+// }
+// console.log(num);
+// console.log(num == Math.pow(2,53));
+
+// const a = 2172141653;
+// const b = 15346349309;
+// console.log(a*b);
+// const aa = 2172141653n;
+// const bb = 15346349309n;
+// console.log(aa*bb);
+
+// var x = 123456789;
+// var y = 987654321;
+// console.log(x*y);//121932631112635260
+
+// var x = 123456789n;
+// var y = 987654321n;
+// console.log(x*y);//121932631112635269n
+// console.log((x*y).toString());//121932631112635269
+
+// var a = 11n;
+// var b = 11;
+// console.log(typeof a);//bigint
+// console.log(typeof b);//number
+// console.log(a === b)//false
+
+// console.log(Number(0b11));//3
+// console.log(BigInt(0b11n));//3n
+// console.log(Number(0o71));//57
+// console.log(BigInt(0o71n));//57n
+// console.log(Number(0xA));//10
+// console.log(BigInt(0xAn));//10n
+// console.log(BigInt(0b11));//3n
+
+// var x = 6n;
+// var y = 4n;
+// console.log(x + y);//10n
+// console.log(x - y);//2n
+// console.log(x * y);//24n
+// console.log(x / y);//1n
+// console.log(x % y);//2n
+
+// var x = 6;
+// var y = 4;
+// console.log(x + y);//10
+// console.log(x - y);//2
+// console.log(x * y);//24
+// console.log(x / y);//1.5
+// console.log(x % y);//2
+
+// var num = 123456789;
+// num = BigInt(num);
+// var sum = 0n;
+// while(num != 0n){
+//     sum += num % 10n;
+//     num = num/10n;
+// }
+// console.log(sum);
+// console.log(1 + 2n);
+
+var n = 10;
+var m = 10;
+var num = 0;
+lable : for(var i=0;i<n;i++){
+    for(var j=0;j<m;j++){
+        if(i===5 && j===5){
+            console.log('OK!');
+            break lable;
+        }
+        num++;
+    }
+}
+console.log(num);
+// OK!
+// 55
