@@ -118,3 +118,17 @@
 // console.log(rest);//[]
 //数组赋值，只能扩展运算符放在参数最后一位
 // const [...a, b] = [1, 2, 3];//SyntaxError: Rest element must be last element
+//（4）字符串
+//将字符串转为真正的数组
+// console.log([...'hello']);//[ 'h', 'e', 'l', 'l', 'o' ]
+//正确识别四个字节的Unicode
+// console.log('x\uD83D\uDE80y'.length);//4
+// console.log(...['x\uD83D\uDE80y'].length);//编辑器报错，浏览器显示3
+// function length(str) {
+//     return [...str].length;
+// }
+// console.log(length('\uD83D\uDE80'));//1
+let str = 'x\uD83D\uDE80y';
+console.log(str);
+console.log(str.split('').reverse().join(''));//y��x
+console.log([...str].reverse().join(''));//y🚀x
