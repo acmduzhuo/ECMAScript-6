@@ -128,7 +128,14 @@
 //     return [...str].length;
 // }
 // console.log(length('\uD83D\uDE80'));//1
-let str = 'x\uD83D\uDE80y';
-console.log(str);
-console.log(str.split('').reverse().join(''));//y��x
-console.log([...str].reverse().join(''));//y🚀x
+// let str = 'x\uD83D\uDE80y';
+// console.log(str);
+// console.log(str.split('').reverse().join(''));//y��x
+// console.log([...str].reverse().join(''));//y🚀x
+//上面代码中，如果不用扩展运算符，字符串的reverse操作就不正确
+//（5）实现了Iterator接口的对象
+//任何定义了遍历器接口的对象，都可以用扩展运算符转为真正的数组
+// let nodeList = document.querySelectorAll('div');
+// let array = [...nodeList];
+//querySelectorAll返回的是一个NodeList对象，不是数组，而是类似数组的对象
+//
