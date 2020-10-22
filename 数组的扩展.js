@@ -138,4 +138,12 @@
 // let nodeList = document.querySelectorAll('div');
 // let array = [...nodeList];
 //querySelectorAll返回的是一个NodeList对象，不是数组，而是类似数组的对象
-//
+//对于没有部署Iterator接口的类数组对象，则无法转为真正的数组
+let arrayLike = {
+    '0': 'a',
+    '1': 'b',
+    '2': 'c',
+    length: 3
+};
+let arr = [...arrayLike];
+console.log(arr);//TypeError: arrayLike is not iterable
