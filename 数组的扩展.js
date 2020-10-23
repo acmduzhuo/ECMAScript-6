@@ -156,5 +156,5 @@ let map = new Map([
 ]);
 let arr = [...map.keys()];
 let arr1 = [...map.values()];
-console.log(arr);
-console.log(arr1);
+console.log(arr);//[ 1, 2, 3 ]
+console.log(arr1);//[ 'one', 'two', 'three' ]
