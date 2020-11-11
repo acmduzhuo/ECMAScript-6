@@ -149,12 +149,21 @@
 // console.log(arr);//TypeError: arrayLike is not iterable
 //（6）Map和Set结构，Generator函数
 //只有是具有Iterator接口的对象，都可以以使用扩展运算符
-let map = new Map([
-    [1, 'one'],
-    [2, 'two'],
-    [3, 'three'],
-]);
-let arr = [...map.keys()];
-let arr1 = [...map.values()];
-console.log(arr);//[ 1, 2, 3 ]
-console.log(arr1);//[ 'one', 'two', 'three' ]
+// let map = new Map([
+//     [1, 'one'],
+//     [2, 'two'],
+//     [3, 'three'],
+// ]);
+// let arr = [...map.keys()];
+// let arr1 = [...map.values()];
+// console.log(arr);//[ 1, 2, 3 ]
+// console.log(arr1);//[ 'one', 'two', 'three' ]
+let arrayLike = {
+    '0' : 'a',
+    '1' : 'b',
+    '2' : 'c',
+    length : 3
+};
+console.log(arrayLike.length);
+var arr1 = [].slice.call(arrayLike);
+console.log(arr1);
